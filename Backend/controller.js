@@ -20,15 +20,45 @@ const getusers =(req, res, next) => {
     });
 };
 
+const addUser = (userData, cb) => {
+    const newUser = new user(userData);
+    newUser.save((err, savedUser) => {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, savedUser);
+    });
+};
+
 const getUserByid = (id, cb) => {
-    const user = users.find(user => user.id === id);
-    if (user) {
+    user.findById(id, (err, user) => {
+        if (err) {
+            return cb(err);
+        }
         cb(null, user);
-    } else {
-        cb(new Error('User not found'));
-    }
+    });
+};
+
+const updateUser = (id, userData, cb) => {
+    user.findByIdAndUpdate(id, userData, { new: true }, (err, updatedUser) => {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, updatedUser);
+    });
+};
+
+const deleteUser = (id, cb) => {
+    user.findByIdAndDelete(id, (err, deletedUser) => {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, deletedUser);
+    });
 };
 
 exports.getusers = getusers;
-exports.getUserByid = getUserByid; 
-
+exports.getUserByid = getUserByid;
+exports.addUser = addUser;
+exports.updateUser = updateUser;
+exports.deleteUser = deleteUser;

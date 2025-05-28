@@ -1,3 +1,5 @@
+const user = require('./model');
+
 const users = [
     {
         id: 1,
@@ -9,8 +11,13 @@ const users = [
     }
 ];
 
-const getusers =(cb) => {
-    cb(null, users);
+const getusers =(req, res, next) => {
+    user.find({}, (err, users) => {
+        if (err) {
+            return next(err);
+        }
+        res.json(users);
+    });
 };
 
 const getUserByid = (id, cb) => {

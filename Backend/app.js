@@ -28,4 +28,35 @@ app.get('/user', (req, res) => {
     });
 });
 
-module.exports = app; 
+app.post('/user', (req, res) => {
+    const userData = req.body;
+    controller.addUser(userData, (err, savedUser) => {
+        if (err) {
+            return res.status(500).send('Error adding user');
+        }
+        res.status(201).json(savedUser);
+    });
+});
+
+app.put('/user', (req, res) => {
+    const id = req.query.id;
+    const userData = req.body;
+    controller.updateUser(id, userData, (err, updatedUser) => {
+        if (err) {
+            return res.status(500).send('Error updating user');
+        }
+        res.json(updatedUser);
+    });
+});
+
+app.delete('/user', (req, res) => {
+    const id = req.query.id;
+    controller.deleteUser(id, (err) => {
+        if (err) {
+            return res.status(500).send('Error deleting user');
+        }
+        res.status(204).send();
+    });
+});
+
+module.exports = app;
